@@ -40,3 +40,13 @@ form.onsubmit = (event) => {
   }
 
 }
+
+function expenseAdd (newExpense) {
+  try {
+    
+  } catch (error) {
+    alert("Erro inesperavado, não foi possivel atualizar a lista de despesas")
+    console.log(error)
+  }
+}
+
