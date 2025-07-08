@@ -1,83 +1,83 @@
-// seleciona os elementos do formulário.
-const form = document.querySelector("form");
-const amount = document.getElementById("amount");
-const expense = document.getElementById("expense");
-const category = document.getElementById("category");
+// Seleciona os elementos do formulário.
+const form = document.querySelector("form");                    // Seleciona o formulário inteiro
+const amount = document.getElementById("amount");                // Campo de valor da despesa
+const expense = document.getElementById("expense");              // Campo de nome da despesa
+const category = document.getElementById("category");            // Campo de categoria da despesa
 
-// Seleciona os elementos da lista
-const expenseList = document.querySelector("ul");
+// Seleciona o elemento da lista onde as despesas serão exibidas.
+const expenseList = document.querySelector("ul");                // Lista (<ul>) das despesas
 
-// Captura o evento de input para formatar o valor.
+// Captura o evento de input no campo de valor para formatar automaticamente em Real (R$).
 amount.oninput = () => {
-  let value = amount.value.replace(/\D/g, "");
+  let value = amount.value.replace(/\D/g, "");                   // Remove qualquer caractere não numérico
 
-  // Primeiro troca o valor de texto para número e depois converte para centavos para fazer a mudança de formato
-  // (exemplo: 150 / 100 = 1.5 que é 1,50)
-  value = Number(value) / 100;
+  value = Number(value) / 100;                                    // Converte para centavos (ex: 1234 => 12,34)
 
-  amount.value = formatCurrencyBRL(value);
+  amount.value = formatCurrencyBRL(value);                       // Atualiza o campo com valor formatado
 };
 
+// Função que formata o número para o padrão BRL (Real brasileiro).
 function formatCurrencyBRL(value) {
   value = value.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
 
-  return value;
+  return value;                                                   // Retorna o valor formatado como R$ X,XX
 }
 
+// Captura o evento de envio do formulário para criar uma nova despesa.
 form.onsubmit = (event) => {
-  event.preventDefault();
+  event.preventDefault();                                         // Impede o recarregamento da página ao enviar o formulário
 
-  // Cria um objeto com os detalhes da nova despesa
+  // Cria um objeto contendo os detalhes da nova despesa.
   const newExpense = {
-    id: new Date().getTime(),
-    expense: expense.value,
-    category_id: category.value,
-    category_name: category.options[category.selectedIndex].text,
-    amount: amount.value,
-    created_at: new Date(),
+    id: new Date().getTime(),                                     // ID único baseado no timestamp atual
+    expense: expense.value,                                       // Nome da despesa digitado pelo usuário
+    category_id: category.value,                                  // ID da categoria selecionada
+    category_name: category.options[category.selectedIndex].text, // Nome (texto) da categoria selecionada
+    amount: amount.value,                                         // Valor da despesa (já formatado)
+    created_at: new Date(),                                       // Data e hora atual da criação
   };
 
-  expenseAdd(newExpense);
+  expenseAdd(newExpense);                                         // Chama a função para adicionar essa despesa na lista
 };
 
+// Função que cria e adiciona o item da despesa na lista (<ul>).
 function expenseAdd(newExpense) {
-  // Cria o elemento para adicionar na lista
   try {
-    
-    // Cria o elemento de li na ul
+    // Cria o item da lista (<li>) que irá conter a despesa.
     const expenseItem = document.createElement("li");
-    expenseItem.classList.add("expense");
-    
-    // Cria o icone
+    expenseItem.classList.add("expense");                         // Adiciona uma classe para estilização
+
+    // Cria o ícone da categoria da despesa.
     const expenseIcon = document.createElement("img");
-    expenseIcon.setAttribute("src", `img/${newExpense.category_id}.svg`);
-    expenseIcon.setAttribute("alt", newExpense.category_name);
+    expenseIcon.setAttribute("src", `img/${newExpense.category_id}.svg`);   // Define o caminho da imagem baseado no ID da categoria
+    expenseIcon.setAttribute("alt", newExpense.category_name);              // Define o texto alternativo da imagem
 
-    // Cria a info da despesa.
-    const expenseInfo = document.createElement("div")
-    expenseInfo.classList.add("expense-info")
-    
-    // Cria o nome da despesa
-    const expenseName = document.createElement("strong")
-    expenseName.textContent = newExpense.expense
+    // Cria uma <div> para armazenar o nome e a categoria da despesa.
+    const expenseInfo = document.createElement("div");
+    expenseInfo.classList.add("expense-info");                    // Classe para estilização da <div>
 
-    const expenseCategory = document.createElement("span")
-    expenseCategory.textContent = newExpense.category_name
+    // Cria o elemento <strong> para exibir o nome da despesa.
+    const expenseName = document.createElement("strong");
+    expenseName.textContent = newExpense.expense;                  // Define o texto com o nome da despesa
 
-    // adiciona nome e categoria na div das informacoes da despesa
-    expenseInfo.append(expenseName, expenseCategory)
+    // Cria o elemento <span> para exibir o nome da categoria.
+    const expenseCategory = document.createElement("span");
+    expenseCategory.textContent = newExpense.category_name;        // Define o texto com o nome da categoria
 
+    // Adiciona o nome e a categoria dentro da <div> de informações.
+    expenseInfo.append(expenseName, expenseCategory);
+
+    // Adiciona o item <li> na lista (<ul>).
     expenseList.append(expenseItem);
 
+    // Adiciona o ícone e a <div> com informações dentro do item <li>.
     expenseItem.append(expenseIcon, expenseInfo);
 
-
-
-    // Caso não dê certo para com o erro
   } catch (error) {
+    // Se algo der errado, exibe um alerta e registra o erro no console.
     alert("Erro inesperavado, não foi possivel atualizar a lista de despesas");
     console.log(error);
   }
