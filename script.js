@@ -1,11 +1,11 @@
 // seleciona os elementos do formulário.
-const form = document.querySelector("form")
+const form = document.querySelector("form");
 const amount = document.getElementById("amount");
 const expense = document.getElementById("expense");
-const category = document.getElementById("category")
+const category = document.getElementById("category");
 
 // Seleciona os elementos da lista
-const expenseList = document.querySelector("ul")
+const expenseList = document.querySelector("ul");
 
 // Captura o evento de input para formatar o valor.
 amount.oninput = () => {
@@ -28,7 +28,7 @@ function formatCurrencyBRL(value) {
 }
 
 form.onsubmit = (event) => {
-  event.preventDefault()
+  event.preventDefault();
 
   // Cria um objeto com os detalhes da nova despesa
   const newExpense = {
@@ -37,30 +37,48 @@ form.onsubmit = (event) => {
     category_id: category.value,
     category_name: category.options[category.selectedIndex].text,
     amount: amount.value,
-    created_at: new Date()
-  }
+    created_at: new Date(),
+  };
 
-  expenseAdd(newExpense)
-}
+  expenseAdd(newExpense);
+};
 
-function expenseAdd (newExpense) {
+function expenseAdd(newExpense) {
   // Cria o elemento para adicionar na lista
   try {
+    
     // Cria o elemento de li na ul
-    const expenseItem = document.createElement("li")
-    expenseItem.classList.add("expense")
+    const expenseItem = document.createElement("li");
+    expenseItem.classList.add("expense");
+    
+    // Cria o icone
+    const expenseIcon = document.createElement("img");
+    expenseIcon.setAttribute("src", `img/${newExpense.category_id}.svg`);
+    expenseIcon.setAttribute("alt", newExpense.category_name);
 
-    const expenseIcon = document.createElement("img")
-    expenseIcon.setAttribute("src", `img/${newExpense.category_id}.svg`)
-    expenseIcon.setAttribute("alt", newExpense.category_name)
+    // Cria a info da despesa.
+    const expenseInfo = document.createElement("div")
+    expenseInfo.classList.add("expense-info")
+    
+    // Cria o nome da despesa
+    const expenseName = document.createElement("strong")
+    expenseName.textContent = newExpense.expense
 
-    expenseList.append(expenseItem)
-    expenseItem.append(expenseIcon)
+    const expenseCategory = document.createElement("span")
+    expenseCategory.textContent = newExpense.category_name
 
-// Caso não dê certo para com o erro
+    // adiciona nome e categoria na div das informacoes da despesa
+    expenseInfo.append(expenseName, expenseCategory)
+
+    expenseList.append(expenseItem);
+
+    expenseItem.append(expenseIcon, expenseInfo);
+
+
+
+    // Caso não dê certo para com o erro
   } catch (error) {
-    alert("Erro inesperavado, não foi possivel atualizar a lista de despesas")
-    console.log(error)
+    alert("Erro inesperavado, não foi possivel atualizar a lista de despesas");
+    console.log(error);
   }
 }
-
