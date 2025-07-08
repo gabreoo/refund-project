@@ -4,7 +4,8 @@ const amount = document.getElementById("amount");
 const expense = document.getElementById("expense");
 const category = document.getElementById("category")
 
-
+// Seleciona os elementos da lista
+const expenseList = document.querySelector("ul")
 
 // Captura o evento de input para formatar o valor.
 amount.oninput = () => {
@@ -39,11 +40,24 @@ form.onsubmit = (event) => {
     created_at: new Date()
   }
 
+  expenseAdd(newExpense)
 }
 
 function expenseAdd (newExpense) {
+  // Cria o elemento para adicionar na lista
   try {
-    
+    // Cria o elemento de li na ul
+    const expenseItem = document.createElement("li")
+    expenseItem.classList.add("expense")
+
+    const expenseIcon = document.createElement("img")
+    expenseIcon.setAttribute("src", `img/${newExpense.category_id}.svg`)
+    expenseIcon.setAttribute("alt", newExpense.category_name)
+
+    expenseList.append(expenseItem)
+    expenseItem.append(expenseIcon)
+
+// Caso não dê certo para com o erro
   } catch (error) {
     alert("Erro inesperavado, não foi possivel atualizar a lista de despesas")
     console.log(error)
