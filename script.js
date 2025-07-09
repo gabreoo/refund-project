@@ -78,8 +78,15 @@ function expenseAdd(newExpense) {
     expenseAmount.classList.add('expense-amount')
     expenseAmount.innerHTML = `<small>R$</small> ${newExpense.amount.toUpperCase().replace("R$", "")}`
 
+    // Cria o icone de remover 
+    const removeIcon = document.createElement("img")
+    removeIcon.classList.add("remove-icon")
+    removeIcon.setAttribute("src", "img/remove.svg")
+    removeIcon.setAttribute("alt", "remover")
+
     // Adiciona o ícone e a <div> com informações dentro do item <li>.
-    expenseItem.append(expenseIcon, expenseInfo, expenseAmount);
+    expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon);
+
   } catch (error) {
     // Se algo der errado, exibe um alerta e registra o erro no console.
     alert("Erro inesperavado, não foi possivel atualizar a lista de despesas");
