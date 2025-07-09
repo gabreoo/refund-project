@@ -6,7 +6,7 @@ const category = document.getElementById("category"); // Campo de categoria da d
 
 // Seleciona o elemento da lista onde as despesas serão exibidas.
 const expenseList = document.querySelector("ul"); // Lista (<ul>) das despesas
-
+const expenseQuantity = document.querySelector("aside header p span")
 // Captura o evento de input no campo de valor para formatar automaticamente em Real (R$).
 amount.oninput = () => {
   let value = amount.value.replace(/\D/g, ""); // Remove qualquer caractere não numérico
@@ -74,22 +74,40 @@ function expenseAdd(newExpense) {
     expenseList.append(expenseItem);
 
     // Cria o valor da despesa
-    const expenseAmount = document.createElement("span")
-    expenseAmount.classList.add('expense-amount')
-    expenseAmount.innerHTML = `<small>R$</small> ${newExpense.amount.toUpperCase().replace("R$", "")}`
+    const expenseAmount = document.createElement("span");
+    expenseAmount.classList.add("expense-amount");
+    expenseAmount.innerHTML = `<small>R$</small> ${newExpense.amount
+      .toUpperCase()
+      .replace("R$", "")}`;
 
-    // Cria o icone de remover 
-    const removeIcon = document.createElement("img")
-    removeIcon.classList.add("remove-icon")
-    removeIcon.setAttribute("src", "img/remove.svg")
-    removeIcon.setAttribute("alt", "remover")
+    // Cria o icone de remover
+    const removeIcon = document.createElement("img");
+    removeIcon.classList.add("remove-icon");
+    removeIcon.setAttribute("src", "img/remove.svg");
+    removeIcon.setAttribute("alt", "remover");
 
     // Adiciona o ícone e a <div> com informações dentro do item <li>.
     expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon);
 
+    // Atualiza os totais da lista.
+    updateTotals();
   } catch (error) {
     // Se algo der errado, exibe um alerta e registra o erro no console.
     alert("Erro inesperavado, não foi possivel atualizar a lista de despesas");
     console.log(error);
+  }
+}
+
+function updateTotals() {
+  try {
+
+    // Recupera os (<li>) da lista (<ul>)
+    const items = expenseList.children
+
+    // Atualiza a quantidade de itens
+    expenseQuantity.textContent = `${items.length} ${items.length > 1  ? "despesas" : "despesa"}`
+  } catch (error) {
+    console.log(error);
+    alert("algo deu errado, tente novamente mais tarde");
   }
 }
