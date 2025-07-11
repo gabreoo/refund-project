@@ -137,4 +137,15 @@ function updateTotals() {
     alert("algo deu errado, tente novamente mais tarde");
   }
 }
+// Seleciona o icone de remover de cada despesa
+expenseList.addEventListener("click", function (event){
+  if(event.target.classList.contains("remove-icon")){
+    // o closest serve para pegar o elemento pai de um elemento
+    const item = event.target.closest(".expense")
 
+    item.remove()
+  }
+
+  // Atualiza o total das despesas sempre que um item for removido
+  updateTotals()
+})
