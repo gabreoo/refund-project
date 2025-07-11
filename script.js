@@ -6,7 +6,9 @@ const category = document.getElementById("category"); // Campo de categoria da d
 
 // Seleciona o elemento da lista onde as despesas serão exibidas.
 const expenseList = document.querySelector("ul"); // Lista (<ul>) das despesas
-const expenseQuantity = document.querySelector("aside header p span")
+const expenseQuantity = document.querySelector("aside header p span");
+const expensesTotal = document.querySelector("aside header h2");
+
 // Captura o evento de input no campo de valor para formatar automaticamente em Real (R$).
 amount.oninput = () => {
   let value = amount.value.replace(/\D/g, ""); // Remove qualquer caractere não numérico
@@ -100,14 +102,39 @@ function expenseAdd(newExpense) {
 
 function updateTotals() {
   try {
+    const items = expenseList.children;
+    let total = 0;
 
-    // Recupera os (<li>) da lista (<ul>)
-    const items = expenseList.children
+    for (let item = 0; item < items.length; item++) {
+      const itemAmount = items[item].querySelector(".expense-amount");
 
-    // Atualiza a quantidade de itens
-    expenseQuantity.textContent = `${items.length} ${items.length > 1  ? "despesas" : "despesa"}`
+      let value = itemAmount.textContent
+        .replace(/[^\d,]/g, "")
+        .replace(",", ".");
+
+      value = parseFloat(value);
+
+      if (isNaN(value)) {
+        alert("Não foi possivel calcular o total. O valor não parece ser um número");
+      }
+
+      total += Number(value); // Corrigido: soma o valor ao total
+    }
+
+    expenseQuantity.textContent = `${items.length} ${items.length > 1 ? "despesas" : "despesa"}`;
+
+    const symbolBRL = document.createElement("small")
+    symbolBRL.textContent = "R$"
+
+    total = formatCurrencyBRL(total).toUpperCase().replace("R$", "")
+    
+    expensesTotal.innerHTML = ""
+
+    expensesTotal.append(symbolBRL, total)
+
   } catch (error) {
     console.log(error);
     alert("algo deu errado, tente novamente mais tarde");
   }
 }
+
