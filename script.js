@@ -90,9 +90,13 @@ function expenseAdd(newExpense) {
 
     // Adiciona o ícone e a <div> com informações dentro do item <li>.
     expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon);
-
+    
+    // Remove o item adicionado dos inputs para receber novo item
+    formClear()
+    
     // Atualiza os totais da lista.
     updateTotals();
+
   } catch (error) {
     // Se algo der errado, exibe um alerta e registra o erro no console.
     alert("Erro inesperavado, não foi possivel atualizar a lista de despesas");
@@ -149,3 +153,13 @@ expenseList.addEventListener("click", function (event){
   // Atualiza o total das despesas sempre que um item for removido
   updateTotals()
 })
+
+function formClear() {
+  expense.value = ""
+  category.value = ""
+  amount.value = ""
+
+
+  // coloca o foco no input
+  expense.focus()
+}
